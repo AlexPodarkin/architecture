@@ -1,96 +1,35 @@
-openapi: 3.0.1
+openapi: 3.0.3
 info:
-  title: пылесос
-  version: 0.0.1
+  title: Робот пылесос
+  version: 1.0.1
 servers:
   - url: http://localhost:8080/api/v1
-    description: server
 paths:
-  /Robots:
+  /users:
     get:
-      summary: получения списка роботов пылесос
+      summary: Список пользователей
       tags:
-        - Robot
-      operationId: getAll
-      responses:
-        "200":
-          description: Успешный ответ со списком пылесосов
-          content:
-            adplication/json:
-              schema:
-                $ref: "#/components/schemas/Robots"
-        "default":
-          description: Всё остальное
-          content:
-            adplication/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-    post:
-      summary: создания пылесоса
-      tags:
-        - Robot
-      operationId: createRobot
-      requestBody:  
-        required: true  
-        content:
-          adplication/json:
-            schema:
-              $ref: "#/components/schemas/Robot"
-      responses:
-        "200":
-          description: Успешный ответ создания пылесос
-          content:
-            adplication/json:
-              schema:
-                $ref: "#/components/schemas/Robot"
-        "default":
-          description: Всё остальное
-          content:
-            adplication/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-  /Robot/findById/{robotId}:
-    get:
-      tags:
-        - Robot
-      summary: Найти робота по ID
-      description: Вернуть робота по ID
-      operationId: getRobotById
-      parameters:
-        - name: robotId
-          in: path
-          description: идентификатор робота
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Robot'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Robot'
-        "400":
-          description: Invalid ID supplied
-        "404":
-          description: Robot not found
-  /Users:
-    get:
-      summary: Метод получения списка пользователей
-      tags:
-        - User
+        - Users
       operationId: getAllUsers
       responses:
         "200":
-          description: Успешный ответ со списком пользователей
+          description: Успешный ответ со спиcком пользователей
           content:
             adplication/json:
               schema:
-                $ref: "#/components/schemas/Users"
+                $ref: "#/components/schemas/Groups"
+        "404":
+          description: Запрашиваемые данные не найдены
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "501":
+          description: Ошибка обработки данных!
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "default":
           description: Всё остальное
           content:
@@ -98,107 +37,413 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     post:
-      summary: Метод создания пользователя
-      tags:
-        - User
+      summary: Метод добавления нового пользователя в список
+      tags: 
+        - Users
       operationId: createUser
       requestBody:
         required: true
         content:
-          adplication/json:
-            schema:
-              $ref: "#/components/schemas/User"
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/User" 
       responses:
         "200":
-          description: Успешный ответ создания пользователя
+          description: Успешный ответ добавления нового пользователя
           content:
             adplication/json:
               schema:
                 $ref: "#/components/schemas/User"
+        "404":
+          description: Запрашиваемые данные не найдены
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "501":
+          description: Ошибка обработки данных!
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "default":
           description: Всё остальное
           content:
             adplication/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /User/findById/{userId}:
+  /users/{user_id}:
     get:
+      summary: Метод получения пользователя по id
       tags:
-        - User
-      summary: Найти пользователя по ID
-      description: Вернуть пользователя по ID
+        - Users
       operationId: getUserById
       parameters:
-        - name: userId
+        - name: user_id
           in: path
-          description: идентификатор пользователя
           required: true
+          description: id Client
           schema:
-            type: integer
-            format: int64
+            type: string
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/User'
-        "400":
-          description: Invalid ID supplied
-        "404":
-          description: User not found
-  /Schedule:
-    put:
-      tags:
-        - Schedule
-      summary: Обновить расписание
-      description: Обновить расписание
-      operationId: updateSchedule
-      requestBody:
-        description: Обновить существующее расписание в базе
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Schedule'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/Schedule'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Schedule'
-        required: true
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Schedule'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Schedule'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Schedule not found
-        '405':
-          description: Validation exception
-  /Schedules:
-    get:
-      summary: Метод получения списка роботов
-      tags:
-        - Schedule
-      operationId: getAllSchedules
-      responses:
-        "200":
-          description: Успешный ответ со списком расписаний
+          description: Успешный ответ получения пользователя по id
           content:
             adplication/json:
               schema:
-                $ref: "#/components/schemas/Schedules"
+                $ref: "#/components/schemas/User"
+        "404":
+          description: Запрашиваемые данные не найдены
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "501":
+          description: Ошибка обработки данных!
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "default":
+          description: Всё остальное
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"   
+    put:
+      summary: Метод обновления данных пользователя
+      tags: 
+        - Users
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: id User
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Успешный ответ обновления данных пользователя
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
+          description: Запрашиваемые данные не найдены
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "501":
+          description: Ошибка обработки данных!
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "default":
+          description: Всё остальное
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Удаление пользователя по id
+      tags:
+        - Users
+      operationId: deleteClientById
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: id User
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Успешное удаление пользователя по id
+          content:
+            adplication/json: {}
+        "404":
+          description: Запрашиваемые данные не найдены
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "501":
+          description: Ошибка обработки данных!
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "default":
+          description: Всё остальное
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error" 
+  /robots:
+    get:
+      summary: Метод получения списка роботов
+      tags:
+        - Robots
+      operationId: getAllRobots
+      responses:
+        "200":
+          description: Успешный ответ с информацией о роботах
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Robot"
+        "404":
+          description: Запрашиваемые данные не найдены
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "501":
+          description: Ошибка обработки данных!
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "default":
+          description: Всё остальное
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Метод добавления данных робота
+      tags: 
+        - Robots
+      responses:
+        "200":
+          description: Успешный ответ добавления данных робота
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Robot"
+        "404":
+          description: Запрашиваемые данные не найдены
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "501":
+          description: Ошибка обработки данных!
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "default":
+          description: Всё остальное
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"        
+  /robots/{robot_id}:
+    get:
+      summary: Метод получения робота по ID
+      tags:
+        - Robots
+      operationId: getRobotById
+      parameters:
+        - name: robot_id
+          in: path
+          required: true
+          description: Robot ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Успешный ответ с информацией о роботе
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Robot"
+        "404":
+          description: Запрашиваемые данные не найдены
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "501":
+          description: Ошибка обработки данных!
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "default":
+          description: Всё остальное
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      summary: Метод обновления данных робота по ID
+      tags: 
+        - Robots
+      operationId: updateRobotById
+      parameters:
+        - name: robot_id
+          in: path
+          required: true
+          description: Robot ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Успешный ответ обновления данных робота по id
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Robot"
+        "404":
+          description: Запрашиваемые данные не найдены
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "501":
+          description: Ошибка обработки данных!
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "default":
+          description: Всё остальное
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Удаление данных робота по id
+      tags:
+        - Robots
+      operationId: deleteServerById
+      parameters:
+        - name: robot_id
+          in: path
+          required: true
+          description: Server ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Успешный ответ удаления данных робота по id
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Robot"
+        "404":
+          description: Запрашиваемые данные не найдены
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "501":
+          description: Ошибка обработки данных!
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "default":
+          description: Всё остальное
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /server:
+    get:
+      summary: Метод получения данных конфигурации сервера
+      tags:
+        - Server
+      operationId: getServerById
+      responses:
+        "200":
+          description: Успешный ответ получения данных сервера
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Server"
+        "404":
+          description: Запрашиваемые данные не найдены
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "501":
+          description: Ошибка обработки данных!
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "default":
+          description: Всё остальное
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"   
+    post:
+      summary: Метод передачи настроек сервера
+      tags: 
+        - Server
+      operationId: createConfig
+      requestBody:
+        required: true
+        content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Server" 
+      responses:
+        "200":
+          description: Успешный ответ добавления конфигурации сервиса
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Server"
+        "404":
+          description: Запрашиваемые данные не найдены
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "501":
+          description: Ошибка обработки данных!
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "default":
+          description: Всё остальное
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"       
+    put:
+      summary: Метод обновления данных сервера
+      tags: 
+        - Server
+      operationId: updateServerById
+      responses:
+        "200":
+          description: Успешный ответ обновления данных сервера
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Server"
+        "404":
+          description: Запрашиваемые данные не найдены
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "501":
+          description: Ошибка обработки данных!
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "default":
           description: Всё остальное
           content:
@@ -207,117 +452,148 @@ paths:
                 $ref: "#/components/schemas/Error"
 components:
   schemas:
-    Robot:
-      type: object
-      required:
-        - id
-        - model
-        - version
-        - status
-        - resourse
-        - fabric_model
-        - mac_adress
-        - idGroupUser
-      properties:
-        id:
-          type: integer
-          example: 1
-        model:
-          type: string
-          example: AA-dsa45
-          description: Модель пылесоса
-        version:
-          type: string
-          example: "v005.2"
-        status:
-          type: string
-          example: "workable"
-        resourse:
-          type: integer
-          example: 75
-        fabric_model:
-          type: string
-          example: 213231-434-33
-          description: Заводской номер робота-пылесоса
-        mac_adress:
-          type: string
-          example: "00.00.00.00.00.00"
-        idGroupUser:
-          type: integer
-          example: 1
-    Robots:
-      type: array
-      items:
-        $ref: "#/components/schemas/Robot"
     User:
       type: object
       required:
-        - id
-        - login
-        - hash_password
+        - idClient
+        - name
         - email
+        - hash_password
+        - is_active
+        - created_at
+        - updated_at
       properties:
-        id:
-          type: integer
+        idUser:
+          type: integer 
           example: 1
-          description: Идентификатор пользователя
-        login:
+          description: Id пользователя
+        name:
           type: string
-          example: Vasia
+          example: mike
           description: Имя пользователя
-        hash_password:
-          type: string
-          example: 2cf24dba5fb0a30e
-          description: Пароль пользователя
         email:
           type: string
-          example: vasia@yandex.ru
-          description: Почта пользователя
-    Users:
-      type: array
-      items:
-        $ref: "#/components/schemas/User"
-    Schedule:
+          example: unnamemik@gmail.com
+          description: Электропочта
+        hash_password:
+          type: string
+          example: mysuperpass
+          description: пароль
+        is_active:
+          type: boolean
+          example: true
+          description: Флаг активности
+        created_at:
+          type: string
+          example: 10.10.2023
+          description: Дата создания
+        updated_at:
+          type: string
+          example: 10.10.2023
+          description: Дата обновления
+    Groups:
       type: object
       required:
-        - id
-        - dateTime
-        - id_robot
-        - location
-        - mode
+        - name
+        - description
+        - created_at
+        - permissions
       properties:
-        id:
-          type: integer
-          example: 1
-          description: Идентификатор расписания
-        dateTime:
+        Name:
           type: string
-          example:  2001-01-01 00:00:01
-          description: Расписание работы робота
-        id_robot:
-          type: integer
-          example: 1
-          description: Идентификатор робота в расписании
-        location:
+          example: Пользователи
+          description: Имя группы
+        Description:
           type: string
-          example: комната 1
-          description: место для уборки
-        mode:
+          example: blablabla
+          description: Описание
+        Created_at:
           type: string
-          example: сухая
-          description: место для уборки
-    Schedules:
-      type: array
-      items:
-        $ref: '#/components/schemas/Schedule'
+          example: 10.10.2023
+          description: Дата создания
+        Permissions:
+          type: string
+          example: 1024
+          description: Уровень доступа    
     Error:
       type: object
       required:
-        - code_error
-        - message_error
+        - codeError
+        - messageError
       properties:
-        code_error:
-          type: integer
-          example: -1
-        message_error:
+        codeError:
           type: string
+          example: 123f456
+          description: Код ошибки
+        messageError:
+          type: string
+          example: error
+          description: Сообщение ошибки
+    Robot:
+      type: object
+      required:
+        - robot_id
+        - name
+        - model
+        - IP_address
+        - MAC_address
+        - soft_version
+        - status
+        - settings_set
+      properties:
+        Robot_id:
+          type: integer
+          example: 1
+          description: ID робота
+        Name:
+          type: string
+          example: robot_no_1
+          description: Имя робота
+        Model:
+          type: string
+          example: kiborg30035
+          description: Модель робота
+        IP_address:
+          type: integer
+          example: 192.168.0.1
+          description: IP адрес робота
+        MAC_address:
+          type: string
+          example: "00:01:E3:F4:6D:C3"
+          description: MAC адрес робота
+        Soft_version:
+          type: string
+          example: 1024
+          description: Версия софта
+        Status:
+          type: string
+          example: 1024
+          description: Статус состояния
+        Settings_set:
+          type: string
+          example: 1024
+          description: Конфигурации
+    Server:
+      type: object
+      required:
+        - name
+        - robot_id
+        - user_id
+        - status
+      properties:
+        Name:
+          type: string
+          example: Robosos
+          description: Имя сервера
+        Robot_id:
+          type: integer
+          example: 1
+          description: ID робота
+        User_id:
+          type: integer
+          example: 1
+          description: ID пользователя
+        Status:
+          type: string
+          example: 1024
+          description: Статус состояния
